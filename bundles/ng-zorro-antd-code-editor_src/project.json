@@ -1,0 +1,73 @@
+{
+  "projectType": "application",
+  "root": "bundles/ng-zorro-antd-code-editor_src",
+  "sourceRoot": "bundles/ng-zorro-antd-code-editor_src",
+  "targets": {
+    "build-dev": {
+      "executor": "@angular-builders/custom-webpack:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "index": "",
+        "main": "",
+        "assets": [],
+        "outputPath": "dist/bundles/ng-zorro-antd-code-editor/dev",
+        "tsConfig": "bundles/tsconfig.json",
+        "customWebpackConfig": {
+          "path": "bundles/ng-zorro-antd-code-editor_src/webpack.config.js",
+          "libraryName": "ng-zorro-antd/code-editor",
+          "libraryTarget": "umd"
+        },
+        "outputHashing": "none",
+        "buildOptimizer": false,
+        "optimization": false,
+        "vendorChunk": true,
+        "extractLicenses": false,
+        "sourceMap": true,
+        "namedChunks": true
+      }
+    },
+    "build-prod": {
+      "executor": "@angular-builders/custom-webpack:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "index": "",
+        "main": "",
+        "assets": [],
+        "outputPath": "dist/bundles/ng-zorro-antd-code-editor/prod",
+        "tsConfig": "bundles/tsconfig.json",
+        "customWebpackConfig": {
+          "path": "bundles/ng-zorro-antd-code-editor_src/webpack.config.js",
+          "libraryName": "ng-zorro-antd/code-editor",
+          "libraryTarget": "umd"
+        },
+        "outputHashing": "none",
+        "budgets": [
+          {
+            "type": "initial",
+            "maximumWarning": "500kb",
+            "maximumError": "1mb"
+          },
+          {
+            "type": "anyComponentStyle",
+            "maximumWarning": "2kb",
+            "maximumError": "4kb"
+          }
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx build-dev ng-zorro-antd-code-editor", "nx build-prod ng-zorro-antd-code-editor"],
+        "parallel": true
+      }
+    },
+    "release": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["node ./tools/lib/bundle/release.js --name=ng-zorro-antd/code-editor --package-name=ng-zorro-antd --publish"],
+        "parallel": false
+      }
+    }
+  }
+}

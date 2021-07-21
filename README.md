@@ -1,2 +1,3 @@
-# rxjs-umd
-The Rxjs UMD bundle for single-spa
+# ezMicroFrontend
+
+The single-spa UMD bundles for micro-frontend apps
