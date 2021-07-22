@@ -34,7 +34,7 @@ async function publish(options) {
   const f0 = n => ('0' + n).slice(-2);
   const date = new Date();
   const y = date.getFullYear();
-  const m = f0(date.getMonth());
+  const m = f0(date.getMonth() + 1);
   const d = f0(date.getDay());
   const h = f0(date.getHours());
   const min = f0(date.getMinutes());
@@ -51,8 +51,8 @@ async function publish(options) {
 ${packages}
 `;
   const options = {
-    tag_name: `${y}_${m}_${d}__${h}_${min}_${s}`,
-    name: `Release - ${y}-${m}-${d} ${h}:${min}:${s}`,
+    tag_name: `${y}_${m}_${d}__${h}_${min}_${s}__GMT`,
+    name: `Release - ${y}-${m}-${d} ${h}:${min}:${s} GMT`,
     body,
     target_commitish: commit,
     draft: false,

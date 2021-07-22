@@ -77,7 +77,7 @@ function publish(options) {
                 f0 = function (n) { return ('0' + n).slice(-2); };
                 date = new Date();
                 y = date.getFullYear();
-                m = f0(date.getMonth());
+                m = f0(date.getMonth() + 1);
                 d = f0(date.getDay());
                 h = f0(date.getHours());
                 min = f0(date.getMinutes());
@@ -85,8 +85,8 @@ function publish(options) {
                 commit = child_process_1.execSync('git rev-parse HEAD').toString().trim();
                 body = "\n\n### Commit: " + commit + "\n\n### Bundles\n\n| Name | Version |\n| --- | --- |\n" + packages + "\n";
                 options = {
-                    tag_name: y + "_" + m + "_" + d + "__" + h + "_" + min + "_" + s,
-                    name: "Release - " + y + "-" + m + "-" + d + " " + h + ":" + min + ":" + s,
+                    tag_name: y + "_" + m + "_" + d + "__" + h + "_" + min + "_" + s + "__GMT",
+                    name: "Release - " + y + "-" + m + "-" + d + " " + h + ":" + min + ":" + s + " GMT",
                     body: body,
                     target_commitish: commit,
                     draft: false,
