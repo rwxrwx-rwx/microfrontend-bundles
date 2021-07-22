@@ -49,7 +49,7 @@
     "@angular/router": "12.0.0",
     "@angular/service-worker": "12.0.0",
     "ng-zorro-antd": "12.0.0",
-    "rxjs": "6.5.3",
+    "rxjs": "6.5.4",
     "single-spa-angular": "5.0.1",
     "tslib": "2.1.0",
     "zone.js": "0.11.4"
