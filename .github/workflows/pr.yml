@@ -1,15 +1,14 @@
-name: build
+name: pr
 
 on:
-  - push
+  pull_request:
+    branches:
+      - master
 
 jobs:
-  build:
-    name: Build
+  release:
+    name: Release
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.PAT }}
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -21,7 +20,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -40,13 +38,4 @@ jobs:
         run: yarn install
 
       - name: Build effected bundles
-        run: yarn nx affected --target=build --base=HEAD~1 --head=HEAD
-
-      - name: Setup NPM
-        run: |
-          npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
-          npm config set scope @ez-microfrontend --global
-
-      - name: Release effected bundles
-        if: github.ref == 'refs/heads/master'
-        run: yarn nx affected --target=release --base=HEAD~1 --head=HEAD
+        run: yarn nx affected --target=build --base=origin/master --head=HEAD
