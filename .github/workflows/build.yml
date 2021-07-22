@@ -47,6 +47,10 @@ jobs:
           npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
           npm config set scope @ez-microfrontend --global
 
-      - name: Release effected bundles
+      - name: Publish effected bundles to NPM
         if: github.ref == 'refs/heads/master'
-        run: yarn nx affected --target=release --base=HEAD~1 --head=HEAD
+        run: yarn nx affected --target=publish-npm --base=HEAD~1 --head=HEAD
+
+      - name: Publish Github
+        if: github.ref == 'refs/heads/master'
+        run: yarn publish:github

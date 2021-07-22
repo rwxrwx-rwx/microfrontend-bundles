@@ -62,10 +62,10 @@
         "parallel": true
       }
     },
-    "release": {
+    "publish-npm": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["node ./tools/lib/bundle/release.js --name=@angular/fire/auth-guard --package-name=@angular/fire --publish"],
+        "commands": ["yarn publish:npm --name=@angular/fire/auth-guard --package-name=@angular/fire --publish"],
         "parallel": false
       }
     }

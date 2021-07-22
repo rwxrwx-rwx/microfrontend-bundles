@@ -24,11 +24,10 @@ const version = require(join(cwd(), 'package.json')).dependencies[packageName];
   };
   writePackageJson(dist, name, normalizedName, version, hash);
 
-  // TODO: enable the publish function.
-  // if (argv.publish) {
-  //   await run('npm publish --access public', { cwd: resolve(dist) });
-  //   await sleep(1000);
-  // }
+  if (argv.publish) {
+    await run('npm publish --access public', { cwd: resolve(dist) });
+    await sleep(1000);
+  }
 
   console.log(colors.green(`Published ${name} successfully!`));
 })();

@@ -62,10 +62,10 @@
         "parallel": true
       }
     },
-    "release": {
+    "publish-npm": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["node ./tools/lib/bundle/release.js --name=@angular/platform-browser --package-name=@angular/platform-browser --publish"],
+        "commands": ["yarn publish:npm --name=@angular/platform-browser --package-name=@angular/platform-browser --publish"],
         "parallel": false
       }
     }

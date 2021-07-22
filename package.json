@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rwxrwx-rwx/microfrontend-bundles.git"
+  },
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
@@ -28,7 +32,9 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "build:tools": "yarn tsc -p ./tools/tsconfig.json",
-    "generate:bundles": "node ./tools/lib/bundle/generate.js"
+    "generate:bundles": "node ./tools/lib/bundle/generate.js",
+    "publish:npm": "node ./tools/lib/bundle/publish-npm.js",
+    "publish:github": "node ./tools/lib/bundle/publish-github.js"
   },
   "dependencies": {
     "@angular/animations": "12.0.0",
@@ -78,6 +84,7 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-cypress": "2.11.3",
     "firebase": "8.7.1",
+    "gh-release": "6.0.0",
     "jest": "27.0.6",
     "jest-preset-angular": "9.0.4",
     "prettier": "2.3.2",

@@ -92,10 +92,10 @@ function writeProject(dir: string, name: string, packageName: string, normalized
         "parallel": true
       }
     },
-    "release": {
+    "publish-npm": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["node ./tools/lib/bundle/release.js --name={name} --package-name={packageName} --publish"],
+        "commands": ["yarn publish:npm --name={name} --package-name={packageName} --publish"],
         "parallel": false
       }
     }
@@ -174,7 +174,8 @@ export function writePackageJson(dir: string, name: string, normalizedName: stri
   "dependencies": {},
   "bugs": {
       "url": "https://github.com/rwxrwx-rwx/microfrontend-bundles/issues"
-  }
+  },
+  "packageName": "{name}"
 }
 `;
   template = template

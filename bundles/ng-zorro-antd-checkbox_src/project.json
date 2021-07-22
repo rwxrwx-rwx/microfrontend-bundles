@@ -62,10 +62,10 @@
         "parallel": true
       }
     },
-    "release": {
+    "publish-npm": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["node ./tools/lib/bundle/release.js --name=ng-zorro-antd/checkbox --package-name=ng-zorro-antd --publish"],
+        "commands": ["yarn publish:npm --name=ng-zorro-antd/checkbox --package-name=ng-zorro-antd --publish"],
         "parallel": false
       }
     }

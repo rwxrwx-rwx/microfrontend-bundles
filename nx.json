@@ -7,7 +7,7 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "release", "lint", "test", "e2e"],
+        "cacheableOperations": ["build", "publish-npm", "lint", "test", "e2e"],
         "accessToken": "MGQzMjhlN2YtNDhjOS00Nzg2LTg0YWQtMzg2ZGJhYTVlYWYyfHJlYWQtd3JpdGU=",
         "canTrackAnalytics": false,
         "showUsageWarnings": true
