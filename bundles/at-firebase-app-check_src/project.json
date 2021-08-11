@@ -1,0 +1,73 @@
+{
+  "projectType": "application",
+  "root": "bundles/at-firebase-app-check_src",
+  "sourceRoot": "bundles/at-firebase-app-check_src",
+  "targets": {
+    "build-dev": {
+      "executor": "@angular-builders/custom-webpack:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "index": "",
+        "main": "",
+        "assets": [],
+        "outputPath": "dist/bundles/at-firebase-app-check/dev",
+        "tsConfig": "bundles/tsconfig.json",
+        "customWebpackConfig": {
+          "path": "bundles/at-firebase-app-check_src/webpack.config.js",
+          "libraryName": "@firebase/app-check",
+          "libraryTarget": "umd"
+        },
+        "outputHashing": "none",
+        "buildOptimizer": false,
+        "optimization": false,
+        "vendorChunk": true,
+        "extractLicenses": false,
+        "sourceMap": true,
+        "namedChunks": true
+      }
+    },
+    "build-prod": {
+      "executor": "@angular-builders/custom-webpack:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "index": "",
+        "main": "",
+        "assets": [],
+        "outputPath": "dist/bundles/at-firebase-app-check/prod",
+        "tsConfig": "bundles/tsconfig.json",
+        "customWebpackConfig": {
+          "path": "bundles/at-firebase-app-check_src/webpack.config.js",
+          "libraryName": "@firebase/app-check",
+          "libraryTarget": "umd"
+        },
+        "outputHashing": "none",
+        "budgets": [
+          {
+            "type": "initial",
+            "maximumWarning": "500kb",
+            "maximumError": "1mb"
+          },
+          {
+            "type": "anyComponentStyle",
+            "maximumWarning": "2kb",
+            "maximumError": "4kb"
+          }
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["nx build-dev at-firebase-app-check", "nx build-prod at-firebase-app-check"],
+        "parallel": true
+      }
+    },
+    "publish-npm": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": ["yarn publish:npm --name=@firebase/app-check --package-name=@firebase/app-check --publish"],
+        "parallel": false
+      }
+    }
+  }
+}

@@ -12,6 +12,9 @@ export function sortObject(unordered) {
 }
 
 export function normalize(name: string) {
+  if (name.startsWith('@firebase')) {
+    return name.replace('@', 'at-').replace(/\//g, '-');
+  }
   return name.replace('@', '').replace(/\//g, '-');
 }
 
