@@ -36,10 +36,12 @@ var skipDependencies = __spreadArray([
     'rxjs/webSocket',
     '@angular/cdk/testing/protractor',
     '@angular/cdk/testing/selenium-webdriver',
-    '@angular/cdk/testing/testbed'
+    '@angular/cdk/testing/testbed',
+    '@firebase/storage-exp'
 ], (mf.skipDependencies || []));
 var entryPointFilterFn = function (e) {
-    return Object.keys(dependencies).some(function (d) { return d === e.entryPoint.packageName; }) &&
+    return (Object.keys(dependencies).some(function (d) { return d === e.entryPoint.packageName; }) ||
+        (e.entryPoint.name && (e.entryPoint.name.startsWith('@firebase') || e.entryPoint.name.startsWith('firebase')))) &&
         !skipDependencies.some(function (p) { return p === e.entryPoint.name; }) &&
         !minimatch(e.entryPoint.name, '**/+(testing|upgrade)') &&
         !minimatch(e.entryPoint.path, '**/node_modules/**/node_modules/**');
@@ -62,9 +64,17 @@ function findEntryPoints() {
         var _b;
         var entryPoint = _a.entryPoint, dependencies = _a.depInfo.dependencies;
         var rootPackageJson = (_b = graph.getNodeData(entryPoint.packageName)) === null || _b === void 0 ? void 0 : _b.packageJson;
-        var deepDependencies = __spreadArray(__spreadArray([], Object.keys((rootPackageJson === null || rootPackageJson === void 0 ? void 0 : rootPackageJson.dependencies) || [])), Object.keys((rootPackageJson === null || rootPackageJson === void 0 ? void 0 : rootPackageJson.peerDependencies) || []));
-        var dependenciesWithName = Array.from(dependencies).map(function (d) { var _a; return (_a = entryPoints.find(function (e) { return e.entryPoint.path === d; })) === null || _a === void 0 ? void 0 : _a.entryPoint.name; });
-        __spreadArray(__spreadArray([], dependenciesWithName), deepDependencies).forEach(function (d) {
+        var dependenciesFromPackageJson = __spreadArray(__spreadArray([], Object.keys((rootPackageJson === null || rootPackageJson === void 0 ? void 0 : rootPackageJson.dependencies) || [])), Object.keys((rootPackageJson === null || rootPackageJson === void 0 ? void 0 : rootPackageJson.peerDependencies) || []));
+        var deepDependencies = Array.from(dependencies).map(function (d) {
+            var _a, _b;
+            var foundPackageName = (_a = entryPoints.find(function (e) { return e.entryPoint.path === d; })) === null || _a === void 0 ? void 0 : _a.entryPoint.name;
+            if (!foundPackageName) {
+                var withoutInternalNodeModulePath_1 = d.replace("/node_modules/" + entryPoint.packageName + "/", '/');
+                foundPackageName = (_b = entryPoints.find(function (e) { return e.entryPoint.path === withoutInternalNodeModulePath_1; })) === null || _b === void 0 ? void 0 : _b.entryPoint.name;
+            }
+            return foundPackageName;
+        });
+        __spreadArray(__spreadArray([], deepDependencies), dependenciesFromPackageJson).forEach(function (d) {
             if (graph.hasNode(d)) {
                 graph.addDependency(entryPoint.name, d);
             }

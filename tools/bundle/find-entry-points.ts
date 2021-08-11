@@ -21,10 +21,12 @@ const skipDependencies = [
   '@angular/cdk/testing/protractor',
   '@angular/cdk/testing/selenium-webdriver',
   '@angular/cdk/testing/testbed',
+  '@firebase/storage-exp',
   ...(mf.skipDependencies || [])
 ];
 const entryPointFilterFn = (e: EntryPointWithDependencies) =>
-  Object.keys(dependencies).some(d => d === e.entryPoint.packageName) &&
+  (Object.keys(dependencies).some(d => d === e.entryPoint.packageName) ||
+    (e.entryPoint.name && (e.entryPoint.name.startsWith('@firebase') || e.entryPoint.name.startsWith('firebase')))) &&
   !skipDependencies.some(p => p === e.entryPoint.name) &&
   !minimatch(e.entryPoint.name, '**/+(testing|upgrade)') &&
   !minimatch(e.entryPoint.path, '**/node_modules/**/node_modules/**');
@@ -50,9 +52,19 @@ export function findEntryPoints() {
   );
   entryPoints.forEach(({ entryPoint, depInfo: { dependencies } }) => {
     const rootPackageJson = graph.getNodeData(entryPoint.packageName)?.packageJson;
-    const deepDependencies = [...Object.keys(rootPackageJson?.dependencies || []), ...Object.keys(rootPackageJson?.peerDependencies || [])];
-    const dependenciesWithName = Array.from(dependencies).map(d => entryPoints.find(e => e.entryPoint.path === d)?.entryPoint.name);
-    [...dependenciesWithName, ...deepDependencies].forEach(d => {
+    const dependenciesFromPackageJson = [
+      ...Object.keys(rootPackageJson?.dependencies || []),
+      ...Object.keys(rootPackageJson?.peerDependencies || [])
+    ];
+    const deepDependencies = Array.from(dependencies).map(d => {
+      let foundPackageName = entryPoints.find(e => e.entryPoint.path === d)?.entryPoint.name;
+      if (!foundPackageName) {
+        const withoutInternalNodeModulePath = d.replace(`/node_modules/${entryPoint.packageName}/`, '/');
+        foundPackageName = entryPoints.find(e => e.entryPoint.path === withoutInternalNodeModulePath)?.entryPoint.name;
+      }
+      return foundPackageName;
+    });
+    [...deepDependencies, ...dependenciesFromPackageJson].forEach(d => {
       if (graph.hasNode(d)) {
         graph.addDependency(entryPoint.name, d);
       }

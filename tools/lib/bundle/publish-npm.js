@@ -44,33 +44,61 @@ var sha1_1 = require("./sha1");
 var template_1 = require("./template");
 var utils_1 = require("./utils");
 var parser = require("yargs-parser");
+var glob = require("glob");
 var argv = parser(process.argv.slice(2));
 var name = argv.name;
 var packageName = argv.packageName;
 var normalizedName = utils_1.normalize(name);
 var dist = "dist/bundles/" + normalizedName;
 var version = require(path_1.join(process_1.cwd(), 'package.json')).dependencies[packageName];
+if (!version) {
+    version = require(path_1.join(process_1.cwd(), "node_modules/" + name + "/package.json")).version;
+}
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var hash;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var hash, _i, _a, js, file, filename, parts, _b, _c, _d;
+    return __generator(this, function (_e) {
+        switch (_e.label) {
             case 0:
+                hash = {
+                    dev: {},
+                    prod: {}
+                };
+                _i = 0, _a = glob.sync(path_1.join(dist, '**/*.js'));
+                _e.label = 1;
+            case 1:
+                if (!(_i < _a.length)) return [3 /*break*/, 6];
+                js = _a[_i];
+                file = path_1.resolve(js);
+                filename = path_1.basename(file);
+                parts = path_1.dirname(file).split(path_1.sep);
+                _e.label = 2;
+            case 2:
+                _e.trys.push([2, 4, , 5]);
+                _b = hash[parts[parts.length - 1]];
+                _c = filename;
+                return [4 /*yield*/, sha1_1.sha1Binary(fs_1.readFileSync(path_1.join(file)))];
+            case 3:
+                _b[_c] = _e.sent();
+                return [3 /*break*/, 5];
+            case 4:
+                _d = _e.sent();
+                return [3 /*break*/, 5];
+            case 5:
+                _i++;
+                return [3 /*break*/, 1];
+            case 6:
                 utils_1.moveFiles(path_1.join(dist, 'dev'), dist);
                 utils_1.moveFiles(path_1.join(dist, 'prod'), dist);
-                hash = {
-                    dev: sha1_1.sha1Binary(fs_1.readFileSync(path_1.join(dist, normalizedName + '.umd.js'))),
-                    prod: sha1_1.sha1Binary(fs_1.readFileSync(path_1.join(dist, normalizedName + '.umd.min.js')))
-                };
                 template_1.writePackageJson(dist, name, normalizedName, version, hash);
-                if (!argv.publish) return [3 /*break*/, 3];
+                if (!argv.publish) return [3 /*break*/, 9];
                 return [4 /*yield*/, utils_1.run('npm publish --access public', { cwd: path_1.resolve(dist) })];
-            case 1:
-                _a.sent();
+            case 7:
+                _e.sent();
                 return [4 /*yield*/, utils_1.sleep(1000)];
-            case 2:
-                _a.sent();
-                _a.label = 3;
-            case 3:
+            case 8:
+                _e.sent();
+                _e.label = 9;
+            case 9:
                 console.log(colors.green("Published " + name + " successfully!"));
                 return [2 /*return*/];
         }
